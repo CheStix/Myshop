@@ -16,13 +16,13 @@ class Cart(object):
 
     def __iter__(self):
         """iterate over items in cart and get products from database"""
-        product_id = self.cart.keys()
+        product_ids = self.cart.keys()
         # get objects from model Product and add them to cart
-        products = Product.objects.filter(id__in=product_id)
+        products = Product.objects.filter(id__in=product_ids)
 
         cart = self.cart.copy()
         for product in products:
-            cart[str(product_id)]['product'] = product
+            cart[str(product.id)]['product'] = product
         for item in cart.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
