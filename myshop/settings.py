@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -128,5 +128,16 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 CART_SESSION_ID = 'cart'
 
+# Celery config
+CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/myshop'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_RESULT_PERSISTENTeve = False
+CELERY_TIMEZONE = TIME_ZONE
+# start Celery in console
+# celery -A myshop worker -l info
+# celery -A myshop worker -l info -P eventlet
+# celery -A myshop flower
