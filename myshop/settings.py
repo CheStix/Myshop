@@ -81,11 +81,14 @@ WSGI_APPLICATION = 'myshop.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'myshop_db',
+        'USER': 'myshop_user',
+        'PASSWORD': 'myshoppass',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -135,9 +138,8 @@ CART_SESSION_ID = 'cart'
 # Celery config
 CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/myshop'
 CELERY_RESULT_BACKEND = 'rpc://'
-CELERY_RESULT_PERSISTENTeve = False
+CELERY_RESULT_PERSISTENT = False
 CELERY_TIMEZONE = TIME_ZONE
 # start Celery in console
-# celery -A myshop worker -l info
-# celery -A myshop worker -l info -P eventlet
+# celery -A myshop worker -l info -P gevent
 # celery -A myshop flower

@@ -11,8 +11,5 @@ def order_created(order_id):
     order = Order.objects.get(id=order_id)
     subject = f'Order №{order.id}'
     message = f'Dear {order.first_name},\n\nYou have successfully placed an order. Your order id is {order.id}'
-    print('*************log*********')
     mail_sent = send_mail(subject, message, 'admin@myshop.com', [order.email])
-    print('*************end*********')
     return mail_sent
-    # print('*********************************')
