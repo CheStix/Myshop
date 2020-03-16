@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from myshop import prod_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'payment.apps.PaymentConfig',
 ]
 
 MIDDLEWARE = [
@@ -136,10 +138,25 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CART_SESSION_ID = 'cart'
 
 # Celery config
+# start Celery in console
+# celery -A myshop worker -l info -P gevent
+# celery -A myshop flower
 CELERY_BROKER_URL = 'amqp://admin:admin@localhost:5672/myshop'
 CELERY_RESULT_BACKEND = 'rpc://'
 CELERY_RESULT_PERSISTENT = False
 CELERY_TIMEZONE = TIME_ZONE
-# start Celery in console
-# celery -A myshop worker -l info -P gevent
-# celery -A myshop flower
+
+
+# braintreegateway.com payment system config
+BRAINTREE_MERCHANT_ID = prod_settings.BRAINTREE_MERCHANT_ID
+BRAINTREE_PUBLIC_KEY = prod_settings.BRAINTREE_PUBLIC_KEY
+BRAINTREE_PRIVATE_KEY = prod_settings.BRAINTREE_PRIVATE_KEY
+
+from braintree import Configuration, Environment
+Configuration.configure(
+    Environment.Sandbox,
+    BRAINTREE_MERCHANT_ID,
+    BRAINTREE_PUBLIC_KEY,
+    BRAINTREE_PRIVATE_KEY
+)
+
