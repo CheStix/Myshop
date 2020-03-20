@@ -1,5 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.conf import settings
+
 import braintree
+import weasyprint
+from io import BytesIO
 
 from orders.models import Order
 
@@ -23,6 +29,24 @@ def payment_process(request):
             # store transaction id in the order
             order.braintree_id = result.transaction.id
             order.save()
+
+            # create e-mail message
+            subject = f'My shop - Invoice no. {order.id}'
+            message = 'Please, find attached the invoice for your recent purchase.'
+            email = EmailMessage(subject, message, 'admin@myshop.com', [order.email])
+
+            # generate pdf
+            html = render_to_string('orders/order/pdf.html', {'order': order})
+            out = BytesIO()
+            stylesheets = [weasyprint.CSS(settings.STATIC_ROOT + 'css/pdf.css')]
+            weasyprint.HTML(string=html).write_pdf(out, stylesheets=stylesheets)
+
+            # attach pdf to mail
+            email.attach(f'order_{order.id}', out.getvalue(), 'application/pdf')
+
+            # send mail
+            email.send()
+
             return redirect('payment:done')
         else:
             return redirect('payment:canceled')
