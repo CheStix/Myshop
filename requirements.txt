@@ -12,6 +12,8 @@ chardet==3.0.4
 cssselect2==0.3.0
 defusedxml==0.6.0
 Django==3.0.3
+django-parler==2.0.1
+django-rosetta==0.9.3
 dnspython==1.16.0
 flower==0.9.3
 gevent==1.4.0
@@ -22,6 +24,7 @@ importlib-metadata==1.5.0
 kombu==4.6.8
 monotonic==1.5
 Pillow==7.0.0
+polib==1.1.0
 psycopg2-binary==2.8.4
 pycparser==2.20
 Pyphen==0.9.5
